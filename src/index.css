@@ -5,9 +5,136 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #BDB7EB;
+  min-height: 400px;
+  margin-bottom: 75px;
+  clear: both;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+header {
+  padding: 20px;
+  background-color: black;
+  color: white;
+}
+
+.brandContainer {
+  display: flex;
+  align-items: center;
+}
+
+.headerLogo {
+  height: 50px;
+  width: auto;
+  filter: invert(100%) sepia(7%) saturate(27%) hue-rotate(278deg) brightness(97%) contrast(109%);
+}
+
+.headerText {
+  padding-left: 10px;
+}
+
+.headerButton {
+  margin-left: auto;
+}
+
+.startGameButton {
+  margin-left: 1%;
+}
+
+.searchContainer {
+  padding: 10px;
+  text-align: center;
+}
+
+.outerVerifyContainer {
+  margin: 2% 5%;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.verifyContainer {
+  background-color: white;
+  border-radius: 5px;
+  text-align: center;
+  padding: 1% 5%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+}
+
+.verifyText {
+  flex-basis: 100%;
+  flex-grow: 1;
+}
+
+.verseText {
+  padding: 0% 5%;
+  width: 75%;
+  flex-grow: 1;
+}
+
+.deleteLogo {
+  height: 20px;
+}
+
+.deleteLogo:hover {
+  filter: invert(15%) sepia(76%) saturate(7477%) hue-rotate(7deg) brightness(107%) contrast(126%);
+}
+
+.footerContainer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+
+.welcomeContainer {
+  background-color: white;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px 50px;
+  margin: 20px 5%;
+}
+
+.verseBundleHeading {
+  text-align: center;
+}
+
+.gameVerse {
+  margin: 5px 8px 5px 0px;
+}
+
+.gameVerseInput {
+  border: 0;
+  text-align: center;
+  font-size: 1.17em;
+  font-weight: bold;
+  min-width: 5ch;
+  box-shadow: 3px 3px 8px grey;
+  border-radius: 10%;
+  padding: 0px 4px 0px 4px;
+  margin: 5px 8px 5px 0px;
+}
+
+.wrongWord {
+  margin-right: 1ch;
+  border: red solid 2px;
+  text-align: center;
+  font-size: 1.17em;
+  font-weight: bold;
+  min-width: 5ch;
+  box-shadow: 3px 3px 8px grey;
+  border-radius: 10%;
 }
