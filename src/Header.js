@@ -39,7 +39,7 @@ export default function Header ({setAddVerse, addVerse, setVerseSearch, verseSea
         <nav className="navbar navbar-expand-md bg-dark navbar-dark">
             <div className="container-fluid">
                 <a href="/" className="headerBrand d-flex flex-row">
-                <img className="navbar-brand headerLogo" src="images/bible.png"></img>
+                <img className="navbar-brand headerLogo" src={process.env.PUBLIC_URL + "/images/bible.png"}></img>
                 <div className="navbar-brand headerText">Memory Game</div>
                 </a>
                 <button className="navbar-toggler" onClick={() => setToggle(toggle => !toggle)}>
