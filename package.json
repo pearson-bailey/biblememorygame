@@ -1,7 +1,7 @@
 {
+  "homepage": "https://pearson-bailey.github.io/biblememorygame",
   "name": "biblememorygame",
   "version": "0.1.0",
-  "homepage": "https://pearson-bailey.github.io/biblememorygame",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.2",
