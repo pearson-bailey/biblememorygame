@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/biblememorygame/static/css/main.a9a15a64.css",
+    "main.js": "/biblememorygame/static/js/main.32783ab6.js",
+    "index.html": "/biblememorygame/index.html",
+    "main.a9a15a64.css.map": "/biblememorygame/static/css/main.a9a15a64.css.map",
+    "main.32783ab6.js.map": "/biblememorygame/static/js/main.32783ab6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a9a15a64.css",
+    "static/js/main.32783ab6.js"
+  ]
+}
