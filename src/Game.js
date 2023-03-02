@@ -1,87 +1,97 @@
-import React, {useState, useEffect} from "react"
+import React, {useCallback, useMemo, useState} from "react"
+import {gameVerseState, deleteGameVerse} from './features/verse/versesSlice';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function Game (props) {
+function Modal({wrongWords, closeModal, showModal}) {
+    return <div className={showModal ? "gameModalShow" : "gameModalHide"}>
+        {wrongWords ? <div>{`You missed ${wrongWords} words.`}</div> : <div>{'Great work!'}</div>}
+        <button onClick={()=>closeModal()}>Close</button>
+    </div>
+}
+
+export default function Game () {
+    const dispatch = useDispatch();
+    const gameVerse = useSelector(gameVerseState);
     //Set a local variable of the verse string
-    let verseArray = props.gameVerse;
-    const [randomNumberArray, setRandomNumberArray] = useState([])
-    const [answerText, setAnswerText] = useState([])
+    const verseArray = useMemo(() => gameVerse.verseText.trim().split(" "), [gameVerse]);
+    const [answerText, setAnswerText] = useState([]);
+    const [wrongWords, setWrongWords] = useState(0);
+    const [showModal, setShowModal] = useState(false);
 
-    //Convert verse string to an array of words
-    verseArray = verseArray.toString().trim().split(" ");
-
-    useEffect(() => {
-        //Init a blank array for random numbers
-        let randomNumbers = new Set();
-
-        // Fill the array of random numbers equal to half the size of verse array
-        while (randomNumbers.size !== Math.floor(verseArray.length * 0.5)) {
-            randomNumbers.add(Math.floor(Math.random() * verseArray.length));
+    const randomNumberArray = useMemo(() => {
+        const rands = [];
+        while (rands.length < verseArray.length * 0.5) {
+            const r = Math.floor(Math.random() * verseArray.length);
+            if (rands.indexOf(r) === -1) {
+                rands.push(r);
+            }
         }
+        return rands;
+    }, [verseArray]);
 
-        setRandomNumberArray(Array.from(randomNumbers))
-        
-        randomNumberArray.forEach((number) => {
-            setAnswerText(prevAnswerText => ({...prevAnswerText, number : " "}))
-        })
-    }, [verseArray.length])
-
-    const handleChange = React.useCallback((event) => {
-        const {id, innerText} = event.target
-        setAnswerText(prevAnswerText => ({...prevAnswerText, [id]: innerText}))
+    const handleChange = useCallback((event) => {
+        const {id, innerText} = event.target;
+        setAnswerText(prevAnswerText => ({...prevAnswerText, [id]: innerText}));
       }, [])
 
+      const closeModal = useCallback(() => {
+        setShowModal(false);
+        !wrongWords ? dispatch(deleteGameVerse()) : setWrongWords(0);
+      }, [wrongWords, setWrongWords, setShowModal, dispatch])
+
 // Render words in a loop; use randomNumbers array to render input boxes
-    const gameVerse = verseArray
+    const gameVerseCopy = verseArray
     let i = 0;
 
     // eslint-disable-next-line array-callback-return
-    const displayVerse = gameVerse.map((word, index) => {
+    const displayVerse = gameVerseCopy.map((word, index) => {
         if (randomNumberArray.includes(index)) {
             if (i === 0) {
                 i++;
-                return <div type="text" id={index} className="gameVerseInput" contentEditable="true" onInput={handleChange} autoCapitalize="none"/>
+                return <div type="text" id={index} key={index} className="gameVerseInput" contentEditable="true" onInput={handleChange} autoCapitalize="none"/>
             } else {
-                return <div type="text" id={index} className="gameVerseInput" contentEditable="true" onInput={handleChange} autoCapitalize="none"/>
+                return <div type="text" id={index} key={index} className="gameVerseInput" contentEditable="true" onInput={handleChange} autoCapitalize="none"/>
             }
         } else {
-            return <h3 className="gameVerse" >{word}</h3>
+            return <h3 className="gameVerse" id={index} key={index} >{word}</h3>
         }
-    })
+    });
 
-    function handleSubmit(event) {
-        event.preventDefault()
-        let wrongWords = 0
+    const handleSubmit = useCallback((e) => {
+        e.preventDefault();
+        let wrongWordsCount = 0;
         randomNumberArray.forEach((number) => {
-            // Figure out why answerData.number is not returning a value
-            let word
+            let word;
             if (answerText[number] !== undefined) {
-                word = answerText[number].replace(/[^\w]|_/g, "").trim().toLowerCase()
+                word = answerText[number].replace(/[^\w]|_/g, "").trim().toLowerCase();
             } else {
-                word = " "
+                word = " ";
             }
             if (word !== verseArray[number].replace(/[^\w]|_/g, "").trim().toLowerCase()) {
-                wrongWords = wrongWords + 1
-                document.getElementById(number).className = "wrongWord"
+                wrongWordsCount++;
+                document.getElementById(number).className = "wrongWord";
             } else {
-                document.getElementById(number).className = "gameVerseInput"
+                document.getElementById(number).className = "gameVerseInput";
             }
         })
-        if (wrongWords === 0) {
-            alert("Great work!")
-            props.endGame()
-        } else {
-            alert(`You missed ${wrongWords} words.`)
-            wrongWords = 0
-        }
-    }
+        setWrongWords(wrongWordsCount);
+        setShowModal(true);
+    }, [answerText, randomNumberArray, verseArray]);
     
     return (
         <div className="outerVerifyContainer" onSubmit={handleSubmit}>
-            <form className="verifyContainer verseText" autocomplete="off">
+            <form className="verifyContainer verseText" autoComplete="off">
                 {displayVerse}
-                <h3 className="verifyText">({props.gameReference})</h3>
+                <h5 className="verifyText">({gameVerse.verseReference})</h5>
                 <button>Check</button>
             </form>
+            <Modal wrongWords={wrongWords} closeModal={closeModal} showModal={showModal} />
+            {showModal && !wrongWords ? 
+                <div>
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                    <div class="firework"></div>
+                </div> : null}
         </div>
     );
 }
